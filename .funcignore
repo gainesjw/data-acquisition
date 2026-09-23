@@ -1,0 +1,53 @@
+# Version control
+.git*
+.gitignore
+
+# Virtual environments
+.venv/
+venv/
+bin/
+include/
+lib/
+pyvenv.cfg
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local configuration (sensitive)
+local.settings.json
+local.settings.example.json
+
+# Testing (not needed in production)
+tests/
+pytest.ini
+.pytest_cache/
+conftest.py
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# CI/CD
+.azure-pipelines/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test reports and documentation
+.coverage*
+coverage.xml
+htmlcov/
+test-results/
+README.md
+docs/
+
+requirements-dev.txt
+.python_packages/

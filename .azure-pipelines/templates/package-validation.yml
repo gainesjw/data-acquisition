@@ -1,0 +1,9 @@
+steps:
+  - bash: |
+      set -euo pipefail
+      python -c 'import json, os, pathlib; (pathlib.Path(os.environ["PACKAGE_DIR"]) / "src/_deployment.json").write_text(json.dumps({"build_id": os.environ["BUILD_BUILDID"], "commit": os.environ["BUILD_SOURCEVERSION"]}))'
+      cd "$PACKAGE_DIR"
+      PYTHONPATH="$PACKAGE_DIR/.python_packages/lib/site-packages" python -c 'import function_app; functions = function_app.app.get_functions(); assert any(f.get_function_name() == "run_dummy_collector" for f in functions), "Timer function not indexed"; print("Packaged Function App imports and indexes successfully")'
+    displayName: Stamp and validate collector package
+    env:
+      PACKAGE_DIR: $(Build.ArtifactStagingDirectory)/function-package

@@ -1,0 +1,38 @@
+# Virtual environment (modern .venv structure)
+.venv/
+venv/
+
+# Legacy virtual environment structure
+bin/
+include/
+lib/
+pyvenv.cfg
+
+# System and IDE
+.DS_Store
+.vscode/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local settings (sensitive data)
+local.settings.json
+
+# Test and coverage output
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+test-results/
+
+# Build and dependency output
+.python_packages/
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Generated deployment identity (created only while packaging)
+/src/_deployment.json

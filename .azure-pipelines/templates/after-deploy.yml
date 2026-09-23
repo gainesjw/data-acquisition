@@ -1,0 +1,19 @@
+steps:
+  - task: AzureCLI@2
+    displayName: Invoke deployed timer and verify this build's output
+    inputs:
+      azureSubscription: $(azureServiceConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        set -euo pipefail
+        python .azure-pipelines/scripts/validate_deployment.py verify
+    env:
+      PYTHONPATH: $(platformPythonPath)
+      FUNCTION_APP_NAME: $(functionAppName)
+      RESOURCE_GROUP_NAME: $(resourceGroupName)
+      STORAGE_ACCOUNT_NAME: $(storageAccountName)
+      CONTAINER_NAME: $(containerName)
+      # Match the identity stamped during CI, not this separate CD run's ID.
+      EXPECTED_BUILD_ID: $(artifactBuildId)
+      EXPECTED_COMMIT: $(artifactSourceVersion)

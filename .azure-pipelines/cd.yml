@@ -1,0 +1,41 @@
+# Register separately after publishing the platform templates and migrating CI.
+trigger: none
+pr: none
+
+resources:
+  repositories:
+    - repository: platform
+      type: git
+      name: platform-dev
+      # Keep identical to the CI ref; pin both to the same release tag when available.
+      ref: refs/heads/main
+  pipelines:
+    - pipeline: appCI
+      # Rename the existing data-acquisition-ci-cd definition to data-acquisition-ci.
+      source: data-acquisition-ci
+      branch: refs/heads/main
+      trigger:
+        branches:
+          include: [refs/heads/main]
+
+variables:
+  - template: environments/production.yml
+
+extends:
+  template: /templates/azure-functions/python/cd/stages.yml@platform
+  parameters:
+    deploy: true
+    dependsOn: []
+    artifactPipeline: appCI
+    usePlatformPython: true
+    appCheckoutPath: s/data-acquisition
+    platformCheckoutPath: s/platform-dev
+    pythonVersion: ${{ variables.pythonVersion }}
+    isFlexConsumption: ${{ eq(variables.isFlexConsumption, 'true') }}
+    azureServiceConnection: ${{ variables.azureServiceConnection }}
+    functionAppName: ${{ variables.functionAppName }}
+    environment: production
+    beforeDeploySteps:
+      - template: /.azure-pipelines/templates/before-deploy.yml@self
+    afterDeploySteps:
+      - template: /.azure-pipelines/templates/after-deploy.yml@self

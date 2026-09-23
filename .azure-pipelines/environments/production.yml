@@ -1,0 +1,13 @@
+# Collector destination applied by the production deployment pipeline.
+variables:
+  - template: ../variables/runtime.yml
+  - name: azureServiceConnection
+    value: REPLACE_WITH_AZURE_SERVICE_CONNECTION
+  - name: functionAppName
+    value: example-data-collector
+  - name: resourceGroupName
+    value: example-data-acquisition-rg
+  - name: storageAccountName
+    value: examplestorageaccount
+  - name: containerName
+    value: dummy-data

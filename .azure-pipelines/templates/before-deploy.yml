@@ -1,0 +1,23 @@
+steps:
+  - bash: |
+      set -euo pipefail
+      python -m pip install -r requirements.txt
+    displayName: Install verification dependencies
+  - task: AzureCLI@2
+    displayName: Configure collector destination and validate target
+    inputs:
+      azureSubscription: $(azureServiceConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        set -euo pipefail
+        python .azure-pipelines/scripts/validate_deployment.py configure
+        python .azure-pipelines/scripts/validate_deployment.py preflight
+    env:
+      PYTHONPATH: $(platformPythonPath)
+      FUNCTION_APP_NAME: $(functionAppName)
+      RESOURCE_GROUP_NAME: $(resourceGroupName)
+      STORAGE_ACCOUNT_NAME: $(storageAccountName)
+      PYTHON_VERSION: $(pythonVersion)
+      IS_FLEX_CONSUMPTION: $(isFlexConsumption)
+      CONTAINER_NAME: $(containerName)

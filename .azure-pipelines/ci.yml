@@ -1,0 +1,39 @@
+# CI entry point. Update the existing DevOps definition to this YAML path.
+# Deployment is handled separately by cd.yml after successful main CI completion.
+trigger:
+  branches:
+    include: [main]
+  paths:
+    include:
+      - src/**
+      - function_app.py
+      - requirements*.txt
+      - host.json
+      - tests/**
+      - pytest.ini
+      - .azure-pipelines/**
+pr:
+  branches:
+    include: [main]
+
+# Same Azure DevOps project; no repository service connection is needed.
+resources:
+  repositories:
+    - repository: platform
+      type: git
+      name: platform-dev
+      ref: refs/heads/main
+
+variables:
+  - template: variables/runtime.yml
+
+extends:
+  template: /templates/azure-functions/python/ci/stages.yml@platform
+  parameters:
+    usePlatformPython: true
+    appCheckoutPath: s/data-acquisition
+    platformCheckoutPath: s/platform-dev
+    pythonVersion: ${{ variables.pythonVersion }}
+    testCommand: python -m pytest tests/unit -v --tb=short --junitxml=test-results/unit.xml --cov=src --cov=function_app --cov=.azure-pipelines/scripts --cov-report=xml:coverage.xml
+    packageValidationSteps:
+      - template: /.azure-pipelines/templates/package-validation.yml@self

@@ -1,0 +1,4 @@
+# Shared by CI packaging and CD runtime validation.
+variables:
+  pythonVersion: '3.14'
+  isFlexConsumption: 'true'
